@@ -1,30 +1,23 @@
 package com.logistica_austral.la.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.logistica_austral.la.dto.Camion;
 import com.logistica_austral.la.repository.CamionRepository;
 import com.logistica_austral.la.repository.CotizacionRepository;
 import com.logistica_austral.la.repository.DetalleCotizacionRepository;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CamionService {
 
     private final DetalleCotizacionRepository detalleCotizacionRepository;
-
     private final CotizacionRepository cotizacionRepository;
-    
-    @Autowired
-    private CamionRepository repository;
-
-    CamionService(CotizacionRepository cotizacionRepository, DetalleCotizacionRepository detalleCotizacionRepository) {
-        this.cotizacionRepository = cotizacionRepository;
-        this.detalleCotizacionRepository = detalleCotizacionRepository;
-    }
+    private final CamionRepository repository;
 
     public List<Camion> obtenerCamionesDisponibles(String tipo) { 
         // tipo

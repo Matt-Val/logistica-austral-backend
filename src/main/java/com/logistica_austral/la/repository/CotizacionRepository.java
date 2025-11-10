@@ -13,6 +13,6 @@ public interface CotizacionRepository extends JpaRepository<Cotizacion, Integer 
     /*
      * Busca las cotizaciones hechas por un cliente específico.
      */
-    List<Cotizacion> findByUsuario(Usuario usuario);
+    List<Cotizacion> findByUsuarioCotizacion(Usuario usuario);
 
 }

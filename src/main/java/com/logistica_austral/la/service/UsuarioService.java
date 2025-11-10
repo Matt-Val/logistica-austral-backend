@@ -2,19 +2,17 @@ package com.logistica_austral.la.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.logistica_austral.la.dto.Usuario;
 import com.logistica_austral.la.repository.UsuarioRepository;
 
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository repository;
-
-    // Cuando se inicializa uno, también se inicializa el otro, ninguno se desconecta.
+    private final UsuarioRepository repository;
 
     public List<Usuario> getAllUsuarios() { 
         return repository.findAll();
