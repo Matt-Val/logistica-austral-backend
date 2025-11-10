@@ -15,7 +15,7 @@ public class CotizacionRequestDTO {
     private LocalDate fechaInicioEstimada;
 
     // El ID del usuario que hace la solicitud (si está logueado)
-    private Long idUsuario; 
+    private Integer idUsuario; 
 
     // Lista de items del carrito
     private List<ItemCotizacionDTO> items;

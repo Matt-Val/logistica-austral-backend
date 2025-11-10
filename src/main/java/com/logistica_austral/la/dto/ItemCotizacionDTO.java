@@ -5,8 +5,12 @@ import lombok.Data;
 
 @Data
 public class ItemCotizacionDTO {
-    private Long idCamion;
+    // Atributo ID
+    private Integer idCamion;
+    
+    // Fechas que el usuario elige
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+
     private Integer meses;
 }
