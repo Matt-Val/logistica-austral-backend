@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import com.logistica_austral.la.dto.Camion;
 import com.logistica_austral.la.repository.CamionRepository;
-import com.logistica_austral.la.repository.CotizacionRepository;
-import com.logistica_austral.la.repository.DetalleCotizacionRepository;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CamionService {
 
-    private final DetalleCotizacionRepository detalleCotizacionRepository;
-    private final CotizacionRepository cotizacionRepository;
     private final CamionRepository repository;
 
     public List<Camion> obtenerCamionesDisponibles(String tipo) { 

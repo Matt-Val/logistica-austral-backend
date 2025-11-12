@@ -18,8 +18,9 @@ public class CotizacionController {
     private final CotizacionService cotizacionService;
 
     /*
-     * Endpoint: /api/cotizaciones
-     * Recibe el formulario completo y lo guarda en la base de datos
+     *  Endpoint: /api/cotizaciones
+     *  Recibe el formulario completo y lo guarda en la base de datos
+     *  
      */
     @PostMapping
     public ResponseEntity<Cotizacion> crearCotizacion(@RequestBody CotizacionRequestDTO cotizacionRequest) { 
