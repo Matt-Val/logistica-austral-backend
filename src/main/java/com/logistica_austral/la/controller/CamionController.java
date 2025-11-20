@@ -4,6 +4,7 @@ import com.logistica_austral.la.dto.Camion;
 import com.logistica_austral.la.service.CamionService;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -35,11 +36,32 @@ public class CamionController {
     }
 
     /*
-     * Endpoint: /api/camiones/admin/disponible=false
-     * Actualiza la disponibilidad de un camión (solo para admin).
+     * Endpoint: /api/camiones/admin/{id}
+     * Actualiza un camión por su ID (solo para admin).
      */
     @PutMapping("/admin/{id}")
-    public Camion actualizarDisponibilidadCamion(@PathVariable Integer id, @RequestParam boolean disponible) { 
-        return camionService.actualizarDisponibilidadCamion(id, disponible);
+    public ResponseEntity<Camion> editarCamion(@PathVariable Integer id, @RequestBody Camion camion) { 
+        Camion camionEditado = camionService.actualizarCamion(id, camion);
+
+        return ResponseEntity.ok(camionEditado);
+    }
+
+    /*
+     * Endpoint: /api/camiones/admin/{id}
+     * Elimina un camión por su ID (solo para admin).
+     */
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Void> eliminarCamion (@PathVariable Integer id) { 
+        camionService.eliminarCamion(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /*
+    * Endpoint: /api/camiones/admin
+    * Obtiene todos los camiones (solo para admin).
+    */
+    @GetMapping("/admin/todos")
+    public List<Camion> obtenerTodosLosCamiones() { 
+        return camionService.obtenerTodosLosCamionesAdmin();
     }
 }

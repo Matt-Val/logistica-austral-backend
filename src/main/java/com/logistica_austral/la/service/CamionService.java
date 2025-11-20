@@ -1,12 +1,13 @@
 package com.logistica_austral.la.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import com.logistica_austral.la.dto.Camion;
 import com.logistica_austral.la.repository.CamionRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,29 +27,49 @@ public class CamionService {
     }
     
     public Camion obtenerCamionesPorId(Integer id) { 
-        Optional<Camion> camionOptional = repository.findById(id);
-        // Si no lo encuentra, que lance un error
-        if (camionOptional.isEmpty()) { 
-            throw new RuntimeException("Camión no encontrado con ID: " + id);
-        }
-        return camionOptional.get();
+        return repository.findById(id)
+            .orElseThrow( () -> new ResponseStatusException( HttpStatus.NOT_FOUND, "Camion no encontrado con ID: " + id));
     }
 
-    public Camion actualizarDisponibilidadCamion(Integer id, boolean disponible) { 
-        // 1. Busca un camión por ID.
-        Camion camion = obtenerCamionesPorId(id);
+    public Camion actualizarCamion(Integer id, Camion camionActualizado) { 
+        // Verificar si el camión existe
+        Camion cam = repository.findById(id)
+            .orElseThrow ( () -> new RuntimeException("Camión no encontrado con ID: " + id));
 
-        // 2. Actualiza su disponibilidad.
-        camion.setDisponibleCamion(disponible);
+        // Actualiza campo por campo
+        cam.setMarcaCamion(camionActualizado.getMarcaCamion());
+        cam.setNombreCamion(camionActualizado.getNombreCamion());
+        cam.setAnnioCamion(camionActualizado.getAnnioCamion());
 
-        // 3. Guarda los cambios en la base de datos.
-        return repository.save(camion);
+        // Images
+        cam.setImagenCamion(camionActualizado.getImagenCamion());
+        cam.setImagenLateralCamion(camionActualizado.getImagenLateralCamion());
+
+        // Detalles tecnicos
+        cam.setTraccionCamion(camionActualizado.getTraccionCamion());
+        cam.setMotorCamion(camionActualizado.getMotorCamion());
+        cam.setLongitudMaxCamion(camionActualizado.getLongitudMaxCamion());
+        cam.setEjeCamion(camionActualizado.getEjeCamion());
+        cam.setPesoCamion(camionActualizado.getPesoCamion());
+        cam.setTipoCamion(camionActualizado.getTipoCamion());
+
+        // Disponibilidad
+        cam.setDisponibleCamion(camionActualizado.getDisponibleCamion());
+
+        // Guardamos los cambios
+        return repository.save(cam);
     }
 
     public List<Camion> obtenerTodosLosCamionesAdmin() { 
         return repository.findAll();
     }
 
-
+    public void eliminarCamion(Integer id) { 
+        if (!repository.existsById(id)) { 
+            throw new RuntimeException("Camión no encontrado con ID: " + id);
+        } else { 
+            repository.deleteById(id);
+        }
+    }
 
 }

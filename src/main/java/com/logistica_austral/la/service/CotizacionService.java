@@ -5,7 +5,12 @@ import com.logistica_austral.la.repository.*;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -46,7 +51,7 @@ public class CotizacionService {
         for (ItemCotizacionDTO itemDto : request.getItems()) { 
             
             Camion camion = camionRepository.findById(itemDto.getIdCamion())
-                .orElseThrow( () -> new RuntimeException("Camion no encontrado: ID " + itemDto.getIdCamion()));
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Camion no encontrado: ID " + itemDto.getIdCamion()));
             
             DetalleCotizacion detalle = new DetalleCotizacion();
             detalle.setCotizacion(cotizacionGuardada);
@@ -58,6 +63,33 @@ public class CotizacionService {
             detalleCotizacionRepository.save(detalle);
         }
         return cotizacionGuardada;
+    }
+
+    public void eliminarCotizacion(Integer id) { 
+
+        // Se busca la cotización
+        Cotizacion coti = cotizacionRepository.findById(id)
+            .orElseThrow( () -> new RuntimeException("Cotización no encontrada con ID: " + id));
+
+        // buscar y eliminar detalles asociados
+        List<DetalleCotizacion> detalles = detalleCotizacionRepository.findByCotizacion(coti);
+        detalleCotizacionRepository.deleteAll(detalles);
+
+        // Eliminar la cotizacion
+        cotizacionRepository.delete(coti);
+        
+    }
+
+    public List<Cotizacion> listarTodasCotizaciones() { 
+        return cotizacionRepository.findAll();
+    }
+
+    public Cotizacion cambiarEstadoCotizacion(Integer id, String nuevoEstado) { 
+        Cotizacion coti = cotizacionRepository.findById(id)
+            .orElseThrow( () -> new RuntimeException("Cotizacion no encontrada"));
+        
+        coti.setEstadoCotizacion(nuevoEstado);
+        return cotizacionRepository.save(coti);
     }
 
 }

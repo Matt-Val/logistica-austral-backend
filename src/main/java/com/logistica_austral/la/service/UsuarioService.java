@@ -5,7 +5,10 @@ import java.util.List;
 import com.logistica_austral.la.dto.Usuario;
 import com.logistica_austral.la.repository.UsuarioRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,10 +24,10 @@ public class UsuarioService {
     public Usuario registrarUsuario(Usuario usuario) { 
         // 1. Validamos que no exista
         if (repository.existsByCorreoUsuario(usuario.getCorreoUsuario())) { 
-            throw new RuntimeException("El correo ya está registrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El correo ya está registrado");
         }
         if (repository.existsByRutUsuario(usuario.getRutUsuario())) { 
-            throw new RuntimeException("El RUT ya está registrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El RUT ya está registrado");
         }
 
         // 2. Se guarda la contraseña.
@@ -39,14 +42,14 @@ public class UsuarioService {
 
     public Usuario loginUsuario(String correo, String password) { 
         Usuario usuario = repository.findByCorreoUsuario(correo)
-            .orElseThrow( () -> new RuntimeException("Correo o contraseña incorrectos"));
+            .orElseThrow( () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos"));
         
         if (usuario.getPasswordUsuario().equals(password)) { 
             // Si la contraseña es correcta
             return usuario;
         } else { 
             // Si la contraseña es incorrecta
-            throw new RuntimeException("Correo o Contraseña incorrectos");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o Contraseña incorrectos");
         }
     }
     
