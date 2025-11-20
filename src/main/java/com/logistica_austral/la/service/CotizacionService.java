@@ -69,7 +69,7 @@ public class CotizacionService {
 
         // Se busca la cotización
         Cotizacion coti = cotizacionRepository.findById(id)
-            .orElseThrow( () -> new RuntimeException("Cotización no encontrada con ID: " + id));
+            .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cotización no encontrada con ID: " + id));
 
         // buscar y eliminar detalles asociados
         List<DetalleCotizacion> detalles = detalleCotizacionRepository.findByCotizacion(coti);
@@ -86,7 +86,7 @@ public class CotizacionService {
 
     public Cotizacion cambiarEstadoCotizacion(Integer id, String nuevoEstado) { 
         Cotizacion coti = cotizacionRepository.findById(id)
-            .orElseThrow( () -> new RuntimeException("Cotizacion no encontrada"));
+            .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cotizacion no encontrada con ID: " + id));
         
         coti.setEstadoCotizacion(nuevoEstado);
         return cotizacionRepository.save(coti);

@@ -4,6 +4,7 @@ import java.util.List;
 import com.logistica_austral.la.dto.Camion;
 import com.logistica_austral.la.repository.CamionRepository;
 
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,7 +35,7 @@ public class CamionService {
     public Camion actualizarCamion(Integer id, Camion camionActualizado) { 
         // Verificar si el camión existe
         Camion cam = repository.findById(id)
-            .orElseThrow ( () -> new RuntimeException("Camión no encontrado con ID: " + id));
+            .orElseThrow ( () -> new ResponseStatusException( HttpStatus.NOT_FOUND, "Camión no encontrado con ID: " + id));
 
         // Actualiza campo por campo
         cam.setMarcaCamion(camionActualizado.getMarcaCamion());
@@ -66,7 +67,7 @@ public class CamionService {
 
     public void eliminarCamion(Integer id) { 
         if (!repository.existsById(id)) { 
-            throw new RuntimeException("Camión no encontrado con ID: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Camión no encontrado con ID: " + id);
         } else { 
             repository.deleteById(id);
         }
