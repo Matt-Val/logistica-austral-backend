@@ -10,13 +10,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBean; // Importante importar esto
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -26,9 +25,10 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;  
 
-    @MockBean
+    @MockBean 
     private UsuarioService usuarioService;
 
     @Test
@@ -37,12 +37,11 @@ public class AuthControllerTest {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setCorreoUsuario("test@example.com");
         nuevoUsuario.setPasswordUsuario("password123");
-        // Campos obligatorios para la entidad (evita futuros errores si se ejecuta la lógica real)
         nuevoUsuario.setNombreUsuario("Test User");
         nuevoUsuario.setRutUsuario("11.111.111-1");
         nuevoUsuario.setTelefonoUsuario("912345678");
 
-        // 1a. Datos de salida.
+        // 1a. Datos de salida (simulados).
         Usuario usuarioGuardado = new Usuario();
         usuarioGuardado.setIdUsuario(1);
         usuarioGuardado.setCorreoUsuario("test@example.com");
@@ -53,6 +52,7 @@ public class AuthControllerTest {
         usuarioGuardado.setPasswordUsuario("password123");
 
         // 2. Configuración del mock
+        // Ahora sí funcionará porque usuarioService es un MockBean y no null
         when(usuarioService.registrarUsuario(any(Usuario.class))).thenReturn(usuarioGuardado);
 
         // 3. Ejecución
@@ -60,10 +60,9 @@ public class AuthControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(nuevoUsuario)))
 
-            //verifica la respuesta
+            // Verificación de la respuesta
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.idUsuario").value(1))
             .andExpect(jsonPath("$.correoUsuario").value("test@example.com"));
     }
-
 }

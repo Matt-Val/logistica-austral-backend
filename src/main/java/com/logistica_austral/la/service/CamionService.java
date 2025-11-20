@@ -4,7 +4,6 @@ import java.util.List;
 import com.logistica_austral.la.dto.Camion;
 import com.logistica_austral.la.repository.CamionRepository;
 
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

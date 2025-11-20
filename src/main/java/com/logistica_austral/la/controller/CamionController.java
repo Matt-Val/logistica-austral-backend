@@ -57,7 +57,7 @@ public class CamionController {
     }
 
     /*
-    * Endpoint: /api/camiones/admin
+    * Endpoint: /api/camiones/admin/todos
     * Obtiene todos los camiones (solo para admin).
     */
     @GetMapping("/admin/todos")
