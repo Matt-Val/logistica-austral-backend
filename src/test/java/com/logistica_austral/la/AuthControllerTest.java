@@ -1,6 +1,7 @@
 package com.logistica_austral.la;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.logistica_austral.la.controller.AuthController; // Importar el controlador explícitamente
 import com.logistica_austral.la.dto.Usuario;
 import com.logistica_austral.la.service.UsuarioService;
 
@@ -11,28 +12,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean; // Importante importar esto
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest; // Cambio importante
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+// @WebMvcTest se centra solo en el controlador especificado y no carga la base de datos.
+@WebMvcTest(AuthController.class)
 public class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;  
+    private ObjectMapper objectMapper;
 
-    @MockBean 
+    @MockBean
     private UsuarioService usuarioService;
 
     @Test
-    public void testRegistroExitoso() throws Exception { 
+    public void testRegistroExitoso() throws Exception {
         // 1. Datos de entrada.
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setCorreoUsuario("test@example.com");
@@ -52,7 +52,6 @@ public class AuthControllerTest {
         usuarioGuardado.setPasswordUsuario("password123");
 
         // 2. Configuración del mock
-        // Ahora sí funcionará porque usuarioService es un MockBean y no null
         when(usuarioService.registrarUsuario(any(Usuario.class))).thenReturn(usuarioGuardado);
 
         // 3. Ejecución
