@@ -53,4 +53,22 @@ public class UsuarioService {
         }
     }
     
+    public Usuario registrarUsuarioAdmin(Usuario usuario) { 
+        // 1. Validamos que no exista
+        if (repository.existsByCorreoUsuario(usuario.getCorreoUsuario())) { 
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El correo ya está registrado");
+        }
+        if (repository.existsByRutUsuario(usuario.getRutUsuario())) { 
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El RUT ya está registrado");
+        }
+
+        // 2. Se guarda la contraseña.
+        usuario.setPasswordUsuario(usuario.getPasswordUsuario());
+
+        // 3. Aseguramos que sea admin.
+        usuario.setEsAdmin(true);
+
+        // 4. Guardamos el usuario
+        return repository.save(usuario);
+    }
 }

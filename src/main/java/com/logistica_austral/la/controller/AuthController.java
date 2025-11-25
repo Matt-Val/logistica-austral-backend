@@ -39,4 +39,14 @@ public class AuthController {
         );
         return ResponseEntity.ok(usuarioLogeado);
     }
+
+    /*
+     * Endpoint: /api/auth/registro-admin
+     * Registra un nuevo usuario administrador
+     */
+    @PostMapping("/registro-admin")
+    public ResponseEntity<Usuario> registrarAdmin(@RequestBody Usuario usuario) { 
+        Usuario adminReg = usuarioService.registrarUsuarioAdmin(usuario);
+        return ResponseEntity.ok(adminReg);
+    }
 }
