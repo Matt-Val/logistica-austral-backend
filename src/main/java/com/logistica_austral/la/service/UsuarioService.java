@@ -71,4 +71,46 @@ public class UsuarioService {
         // 4. Guardamos el usuario
         return repository.save(usuario);
     }
+
+    public Usuario actualizarUsuario(Integer id, Usuario usuarioActualizado) { 
+        Usuario usuario = repository.findById(id)
+            .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+        
+        // Actualizamos los datos
+
+        // Validamos que no tengan nulos para no borrar los datos de manera accidental
+        if (usuarioActualizado.getNombreUsuario() != null) { 
+            usuario.setNombreUsuario(usuarioActualizado.getNombreUsuario());
+        }
+        if (usuarioActualizado.getTelefonoUsuario() != null) { 
+            usuario.setTelefonoUsuario(usuarioActualizado.getTelefonoUsuario());
+        }
+
+        // Lógica de contrasennia
+        String nuevaPassword = usuarioActualizado.getPasswordUsuario();
+
+        if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) { 
+            // Validación básica
+            if (nuevaPassword.length() < 8) { 
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La nueva contraseña debe tener al menos 8 caracteres.");
+            }
+
+            // Actualizamos la contraseña
+            usuario.setPasswordUsuario(nuevaPassword);
+        }
+
+        return repository.save(usuario);
+    }
+
+    public void eliminarUsuario(Integer id) { 
+        if( !repository.existsById(id)) { 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado.");
+        }
+        repository.deleteById(id);
+    }
+
+    public Usuario obtenerUsuarioPorId(Integer id) { 
+        return repository.findById(id)
+            .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado.") );
+    }
 }

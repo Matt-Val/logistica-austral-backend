@@ -64,4 +64,10 @@ public class CamionController {
     public List<Camion> obtenerTodosLosCamiones() { 
         return camionService.obtenerTodosLosCamionesAdmin();
     }
+
+    @PostMapping("/admin")
+    public ResponseEntity<Camion> crearCamion(@RequestBody Camion camion) { 
+        Camion nuevo = camionService.crearCamion(camion);
+        return ResponseEntity.ok(nuevo);
+    }
 }

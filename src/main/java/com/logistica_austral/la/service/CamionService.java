@@ -72,4 +72,10 @@ public class CamionService {
         }
     }
 
+    public Camion crearCamion(Camion camion) { 
+        if(camion.getDisponibleCamion() == null) { 
+            camion.setDisponibleCamion(true);
+        }
+        return repository.save(camion);
+    }
 }
